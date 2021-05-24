@@ -12,8 +12,8 @@ int main(void){
 	Data *test_data;
 	Data *test_label;
 	load_mnist_data(train_images_file, &train_data);
-	load_mnist_data(train_images_file, &train_label);
+	load_mnist_data(train_labels_file, &train_label);
 	load_mnist_data(test_images_file, &test_data);
-	load_mnist_data(test_images_file, &test_label);
+	load_mnist_data(test_labels_file, &test_label);
 	return 0;
 }
