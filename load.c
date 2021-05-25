@@ -16,10 +16,10 @@ void load_mnist_data(const char *filename, Data **data)
 	int magic_number;
 	fread_big_endian(&magic_number, sizeof(magic_number), 1, fp);
 	// MNISTデータはビッグエンディアンなのでそれ用のfreadが必要
-	// magic_numberが2049のときlabelデータ, 2051のときimageデータ
+	// 今回用いるデータではmagic_numberが3074のときlabelデータ, 2051のときimageデータ
 
 	switch(magic_number){
-		case 2049:
+		case 3074:
 			load_mnist_labels_data(fp, data);
 			break;
 		case 2051:
@@ -37,8 +37,20 @@ void load_mnist_data(const char *filename, Data **data)
 }
 
 void load_mnist_labels_data(FILE *fp, Data **data)
+// labelデータを読む
 {
-	return;
+	*data = (Data *)malloc(sizeof(Data));
+	fread_big_endian(&((*data)->item_num), sizeof((*data)->item_num), 1, fp);
+	fseek(fp, 4, SEEK_CUR);
+	// rownum=item_num columnnum=8の行列データで各rowにはlabelの他にNISTの筆者IDなどが記されるが今回は無視する
+	// 0番目がlabel
+	int *buf = (int *)malloc(sizeof(int)*(*data)->item_num*8);
+	fread_big_endian(buf, sizeof(int), (*data)->item_num*8, fp);
+	(*data)->labels = (unsigned char *)malloc(sizeof(unsigned char)*(*data)->item_num);
+	for(int i=0; i<(*data)->item_num; i++){
+		(*data)->labels[i] = (unsigned char)buf[i*8];
+	}
+	free(buf);
 }
 
 void load_mnist_images_data(FILE *fp, Data **data)

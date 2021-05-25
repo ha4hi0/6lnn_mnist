@@ -10,13 +10,15 @@ usage(){
 	echo " -h, --help"
 	echo "  Show this usage."
 	echo " -t, --test"
-	echo "   Only test without updating parameters."
+	echo "  test libralies"
+	echo " --inference"
+	echo "   Only infer test datas without updating parameters."
 	echo " -i, --input filename(bmp)"
 	echo "  Infer what number is written in file."
 }
 
 if [ $# -eq 0 ]; then
-	exec ./main true
+	./main
 	exit 0
 fi
 
@@ -26,15 +28,18 @@ case $1 in
 		exit 1
 		;;
 	-t | --test)
-		./main 0
+		./test_main 0
 		exit 0
+		;;
+	--inference)
+		./main 1
 		;;
 	-i | --input)
 		if [[ ! -z $2 ]]; then
 			usage
 			exit 1
 		fi
-		./main 1 $2
+		./main 2 $2
 		;;
 	-*)
 		echo "$PROGNAME: illegal option"

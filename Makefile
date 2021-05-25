@@ -1,10 +1,11 @@
 CC	= gcc
-CFLAGS = -I. -Wall -g3
-SRCS = $(wildcard *.c)
-OBJS = $(SRCS:%.c=%.o)
-DEPS = $(OBJS:%.o=%.d)
+CFLAGS = -I. -Wall -g3 -lm
+ALLSRCS = $(wildcard *.c)
 ALL_H = $(wildcard *.h)
+SRCS = $(filter-out test.c, $(ALLSRCS))
+TEST_SRCS = $(filter-out main.c, $(ALLSRCS))
 TARGET = main
+TEST_TARGET = test_main
 PROGRAM = dig-recog
 MATRIX_DATAS = A.data
 MNIST_DATAS = $(wildcard qmnist*)
@@ -14,29 +15,24 @@ all: $(TARGET)
 
 .PHONY: clean
 clean:
-	-rm $(TARGET) $(OBJS) $(DEPS)
+	-rm $(TARGET) $(TEST_TARGET)
 
 .PHONY: clean-all
 clean-all:
-	-rm $(TARGET) $(OBJS) $(MATRIX_DATAS) $(DEPS)
-
--include $(DEPS)
+	-rm $(TARGET) $(TEST_TARGET) $(MATRIX_DATAS)
 
 run: $(TARGET) $(MNIST_DATAS)
 	@`bash $(PROGRAM)`
 
-test: $(TARGET)
+test: $(TEST_TARGET)
 	@`bash $(PROGRAM) --test`
 
 install:
 	@`bash install.sh`
 
-$(TARGET): $(OBJS)
-	$(CC) -o $(TARGET) $(OBJS) $(CFLAGS)
+$(TARGET): $(SRCS) $(ALL_H)
+	$(CC) -o $(TARGET) $(SRCS) $(CFLAGS)
 
-%.d: %.c $(ALL_H)
-	$(info GEN $@)
-	@$(CC) -MM $(CFLAGS) $< -MF $@
+$(TEST_TARGET): $(TEST_SRCS) $(ALL_H)
+	$(CC) -o $(TEST_TARGET) $(TEST_SRCS) $(CFLAGS)
 
-%.o: %.c
-	$(CC) -c $< $(CFLAGS)
