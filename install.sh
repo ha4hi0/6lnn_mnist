@@ -22,6 +22,8 @@ function check_and_download(){
 	fi
 }
 
+cd qmnist_data
+
 for filename in ${FILES[@]}
 do
 	check_and_download $filename

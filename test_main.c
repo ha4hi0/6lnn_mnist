@@ -9,8 +9,8 @@ int main(void){
 	cerr("mnist loader and show matrix test\n");
 	Data *train_data;
 	Data *train_label;
-	load_mnist_data("qmnist-train-images-idx3-ubyte", &train_data);
-	load_mnist_data("qmnist-train-labels-idx2-int", &train_label);
+	load_mnist_data("qmnist_data/qmnist-train-images-idx3-ubyte", &train_data);
+	load_mnist_data("qmnist_data/qmnist-train-labels-idx2-int", &train_label);
 	cerr("\nlabel: %d\nmatrix:\n", train_label->labels[100]);
 	show_image(&(train_data->images[100]));
 

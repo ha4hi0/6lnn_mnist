@@ -1,3 +1,5 @@
 main
 test_main
-qmnist-*
+qmnist_data/
+obj/
+log

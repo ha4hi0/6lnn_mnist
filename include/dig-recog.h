@@ -80,5 +80,6 @@ Matrix *softmax(Matrix *y, Matrix *x);
 float cross_entropy_loss(Matrix *x, unsigned char t);
 Parameter *init_params(Parameter **par, char rand);
 
-// main.c
+// train.c
+
 #endif

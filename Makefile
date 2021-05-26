@@ -1,38 +1,33 @@
-CC	= gcc
-CFLAGS = -I. -Wall -g3 -lm
-ALLSRCS = $(wildcard *.c)
-ALL_H = $(wildcard *.h)
-SRCS = $(filter-out test.c, $(ALLSRCS))
-TEST_SRCS = $(filter-out main.c, $(ALLSRCS))
-TARGET = main
-TEST_TARGET = test_main
+CC=gcc
+CFLAGS= -Wall -g3 -lm -I./include
+LIB_DIR=./lib
+OBJ_DIR=./obj
+TEST_TARGET=test_main
+TARGET=main
+ALL_LIBS = $(wildcard $(LIB_DIR)/*.c)
+ALL_OBJS   = $(patsubst $(LIB_DIR)/%.c, $(OBJ_DIR)/%.o, $(ALL_LIBS))
 PROGRAM = dig-recog
-MATRIX_DATAS = A.data
-MNIST_DATAS = $(wildcard qmnist*)
 
 .PHONY: all
-all: $(TARGET)
+all: $(TARGET) $(TEST_TARGET)
 
 .PHONY: clean
 clean:
-	-rm $(TARGET) $(TEST_TARGET)
+	-rm $(TARGET) $(TEST_TARGET) $(OBJ_DIR)/*.o $(OBJ_DIR)/*.d
 
-.PHONY: clean-all
-clean-all:
-	-rm $(TARGET) $(TEST_TARGET) $(MATRIX_DATAS)
-
-run: $(TARGET) $(MNIST_DATAS)
-	@`bash $(PROGRAM)`
+run: $(TARGET)
+	@bash $(PROGRAM)
 
 test: $(TEST_TARGET)
-	@`bash $(PROGRAM) --test`
+	@bash $(PROGRAM) --test
 
 install:
-	@`bash install.sh`
+	@bash install.sh
 
-$(TARGET): $(SRCS) $(ALL_H)
-	$(CC) -o $(TARGET) $(SRCS) $(CFLAGS)
+$(TARGET): $(ALL_LIBS) $(TARGET).c
+	cd obj && $(MAKE)
+	$(CC) -o $(TARGET) $(ALL_OBJS) $(OBJ_DIR)/$(TARGET).o $(CFLAGS)
 
-$(TEST_TARGET): $(TEST_SRCS) $(ALL_H)
-	$(CC) -o $(TEST_TARGET) $(TEST_SRCS) $(CFLAGS)
-
+$(TEST_TARGET): $(ALL_LIBS) $(TEST_TARGET).c
+	cd obj && $(MAKE)
+	$(CC) -o $(TEST_TARGET) $(ALL_OBJS) $(OBJ_DIR)/$(TEST_TARGET).o $(CFLAGS)
