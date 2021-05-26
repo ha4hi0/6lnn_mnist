@@ -1,62 +1,65 @@
 #include "dig-recog.h"
+// 関数のテスト
 
 int main(void){
 	init_genrand(time(NULL));
 
-	fprintf(stderr, "test libralies\n");
-	fprintf(stderr, "mnist loader and show matrix test\n");
+	cerr("hoge");
+	cerr("test libralies\n");
+	cerr("mnist loader and show matrix test\n");
 	Data *train_data;
 	Data *train_label;
 	load_mnist_data("qmnist-train-images-idx3-ubyte", &train_data);
 	load_mnist_data("qmnist-train-labels-idx2-int", &train_label);
-	fprintf(stderr, "\nlabel: %d\nmatrix:\n", train_label->labels[100]);
+	cerr("\nlabel: %d\nmatrix:\n", train_label->labels[100]);
 	show_image(&(train_data->images[100]));
 
-	fprintf(stderr, "\ntest matrix calc and rand init\n");
+	cerr("\ntest matrix calc and rand init\n");
 
-	Matrix C;
-	C.row = 3;
-	C.column = 5;
-	C.val = (float*)malloc(sizeof(float)*C.row*C.column);
-	rand_init(&C);
+	Matrix *C;
+	C = init_matrix(&C, 5, 3);
+	rand_init(C);
 
-	Matrix B;
-	B.row = 5;
-	B.column = 4;
-	B.val = (float*)malloc(sizeof(float)*B.row*B.column);
-	rand_init(&B);
+	Matrix *B;
+	B = init_matrix(&B, 4, 5);
+	rand_init(B);
 
-	Matrix A;
-	A.row = 3;
-	A.column = 4;
-	A.val = (float*)malloc(sizeof(float)*A.row*A.column);
+	Matrix *A;
+	A = init_matrix(&A, 4, 3);
 
-	fprintf(stderr, "C:\n");
-	show(&C);
+	cerr("C:\n");
+	show(C);
 
-	fprintf(stderr, "\nB:\n");
-	show(&B);
+	cerr("\nB:\n");
+	show(B);
 
-	fprintf(stderr, "\nA=CB:\n");
-	show(mul(&A, &B, &C));
+	cerr("\nA=CB:\n");
+	show(mul(A, B, C));
 
-	Matrix D;
-	D.row = 3;
-	D.column = 5;
-	D.val = (float*)malloc(sizeof(float)*D.row*D.column);
+	Matrix *D;
+	D = init_matrix(&D, 5, 3);
 
-	rand_init(&D);
-	fprintf(stderr, "\nD:\n");
-	show(&D);
+	rand_init(D);
+	cerr("\nD:\n");
+	show(D);
 
-	Matrix E;
-	E.row = 3;
-	E.column = 5;
-	E.val = (float*)malloc(sizeof(float)*E.row*E.column);
+	Matrix *E;
+	E = init_matrix(&E, 5, 3);
 
-	fprintf(stderr, "\nE=C+D:\n");
-	show(plus(&E, &D, &C));
+	cerr("\nE=C+D:\n");
+	show(add(E, D, C));
 
-	fprintf(stderr, "\nE=2.0*D:\n");
-	show(scalar(&E, &D, 2.0));
+	cerr("\nE=2.0*D:\n");
+	show(scalar(E, D, 2.0));
+
+	Parameter *par;
+	par = init_params(&par, 2);
+	Matrix *x = &(train_data->images[3]);
+	cerr("\nx:\n");
+	show_image(x);
+	shape(x, INPUT_SIZE, 1);
+	Matrix *y = init_matrix(&y, FC3_SIZE, 1);
+
+	cerr("\ninference (with radom parameter):\n");
+	cerr("%d\n", (int)inference(y, x, par));
 }

@@ -1,4 +1,5 @@
 #include "dig-recog.h"
+// 行列操作を記述
 
 void show(Matrix *mat)
 // 行列の表示
@@ -27,41 +28,41 @@ void show_image(Matrix *mat)
 }
 
 Matrix* mul(Matrix *A, Matrix *B, Matrix *C)
-//CxB=Aを計算する
+// A=BCを計算する
 {
-	assert(C->column == B->row);
-	assert(A->row == C->row);
-	assert(A->column == B->column);
+	assert(B->column == C->row);
+	assert(A->row == B->row);
+	assert(A->column == C->column);
 
-	int abcr=C->column;
-	int arow=C->row;
-	int bcol=B->column;
+	int bccr=B->column;
+	int arow=A->row;
+	int acol=A->column;
 
 	for(int r=0; r<arow; r++){
-		for(int c=0; c<bcol; c++){
-			A->val[r*bcol+c] = 0;
-			for(int ac=0; ac<abcr; ac++){
-				A->val[r*bcol+c] += C->val[r*abcr+ac]*B->val[ac*bcol+c];
+		for(int c=0; c<acol; c++){
+			A->val[r*acol+c] = 0;
+			for(int ac=0; ac<bccr; ac++){
+				A->val[r*acol+c] += B->val[r*bccr+ac]*C->val[ac*acol+c];
 			}
 		}
 	}
 	return A;
 }
 
-Matrix* plus(Matrix *A, Matrix *B, Matrix *C)
-//C+B=Aを計算する
+Matrix* add(Matrix *A, Matrix *C, Matrix *B)
+// A=B+Cを計算する
 {
-	assert(C->column == B->column);
-	assert(B->column == A->column);
-	assert(C->row == B->row);
-	assert(B->row == A->row);
+	assert(B->column == C->column);
+	assert(C->column == A->column);
+	assert(B->row == C->row);
+	assert(C->row == A->row);
 
-	int row = C->row;
-	int col = B->column;
+	int row = B->row;
+	int col = C->column;
 
 	for(int r=0; r<row; r++){
 		for(int c=0; c<col; c++){
-			A->val[r*col+c] = C->val[r*col+c] + B->val[r*col+c];
+			A->val[r*col+c] = B->val[r*col+c] + C->val[r*col+c];
 		}
 	}
 	return A;
@@ -78,10 +79,27 @@ Matrix *scalar(Matrix *A, Matrix *B, double rt)
 
 	for(int r=0; r<row; r++){
 		for(int c=0; c<row; c++){
-			A->val[r*col+c] = rt*B->val[r&col+c];
+			A->val[r*col+c] = rt*B->val[r*col+c];
 		}
 	}
 	return A;
+}
+
+Matrix *init_matrix(Matrix **mat, int row, int column)
+// row*column行列を作成
+{
+	*mat = (Matrix*)malloc(sizeof(Matrix));
+	(*mat)->row = row;
+	(*mat)->column = column;
+	(*mat)->val = (float*)malloc(sizeof(float)*row*column);
+	return *mat;
+}
+
+void free_matrix(Matrix *mat)
+// 行列を削除
+{
+	free(mat->val);
+	free(mat);
 }
 
 void rand_init(Matrix *mat)
@@ -106,4 +124,12 @@ double Uniform()
 // (0, 1) の範囲の一様乱数
 {
 	return genrand_real3();
+}
+
+void shape(Matrix *A, int row, int column)
+// 行列の縦横の長さを変える
+{
+	assert(A->row*A->column == row*column);
+	A->row = row;
+	A->column = column;
 }
