@@ -1,3 +1,6 @@
+// load.c
+// MNISTデータのローダー
+
 #include "dig-recog.h"
 
 void load_mnist_labels_data(FILE *fp, Data **data);

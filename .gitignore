@@ -3,3 +3,4 @@ test_main
 qmnist_data/
 obj/
 log
+*.data

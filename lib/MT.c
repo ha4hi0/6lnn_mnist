@@ -1,3 +1,5 @@
+// MT.c
+
 #include "MT.h"
 
 /* initializes mt[MT_N] with a seed */

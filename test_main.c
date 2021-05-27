@@ -4,7 +4,6 @@
 int main(void){
 	init_genrand(time(NULL));
 
-	cerr("hoge");
 	cerr("test libralies\n");
 	cerr("mnist loader and show matrix test\n");
 	Data *train_data;
@@ -62,4 +61,11 @@ int main(void){
 
 	cerr("\ninference (with radom parameter):\n");
 	cerr("%d\n", (int)inference(y, x, par));
+
+	Parameter *del_par;
+	del_par = init_params(&del_par, 0);
+
+	cerr("\ninference and backpropagation\n");
+	inference_and_backpropagation(y, x, par, del_par, train_label->labels[3]);
+	cerr("%1.9f\n", cross_entropy_loss(y, train_label->labels[3]));
 }
