@@ -39,24 +39,24 @@ void save_params(Parameter *params, const char *filename)
 	}
 	fwrite(&(params->A1->row), sizeof(int), 1, fp);
 	fwrite(&(params->A1->column), sizeof(int), 1, fp);
-	fwrite(params->A1->val, sizeof(float), 1, fp);
+	fwrite(params->A1->val, sizeof(float), params->A1->row*params->A1->column, fp);
 	fwrite(&(params->b1->row), sizeof(int), 1, fp);
 	fwrite(&(params->b1->column), sizeof(int), 1, fp);
-	fwrite(params->b1->val, sizeof(float), 1, fp);
+	fwrite(params->b1->val, sizeof(float), params->b1->row*params->b1->column, fp);
 
 	fwrite(&(params->A2->row), sizeof(int), 1, fp);
 	fwrite(&(params->A2->column), sizeof(int), 1, fp);
-	fwrite(params->A2->val, sizeof(float), 1, fp);
+	fwrite(params->A2->val, sizeof(float), params->A2->row*params->A2->column, fp);
 	fwrite(&(params->b2->row), sizeof(int), 1, fp);
 	fwrite(&(params->b2->column), sizeof(int), 1, fp);
-	fwrite(params->b2->val, sizeof(float), 1, fp);
+	fwrite(params->b2->val, sizeof(float), params->b2->row*params->b2->column, fp);
 
 	fwrite(&(params->A3->row), sizeof(int), 1, fp);
 	fwrite(&(params->A3->column), sizeof(int), 1, fp);
-	fwrite(params->A3->val, sizeof(float), 1, fp);
+	fwrite(params->A3->val, sizeof(float), params->A3->row*params->A3->column, fp);
 	fwrite(&(params->b3->row), sizeof(int), 1, fp);
 	fwrite(&(params->b3->column), sizeof(int), 1, fp);
-	fwrite(params->b3->val, sizeof(float), 1, fp);
+	fwrite(params->b3->val, sizeof(float), params->b3->row*params->b3->column, fp);
 }
 
 void load_params(Parameter *params, const char *filename)
@@ -67,22 +67,22 @@ void load_params(Parameter *params, const char *filename)
 	}
 	fread(&(params->A1->row), sizeof(int), 1, fp);
 	fread(&(params->A1->column), sizeof(int), 1, fp);
-	fread(params->A1->val, sizeof(float), 1, fp);
+	fread(params->A1->val, sizeof(float), params->A1->row*params->A1->column, fp);
 	fread(&(params->b1->row), sizeof(int), 1, fp);
 	fread(&(params->b1->column), sizeof(int), 1, fp);
-	fread(params->b1->val, sizeof(float), 1, fp);
+	fread(params->b1->val, sizeof(float), params->b1->row*params->b1->column, fp);
 
 	fread(&(params->A2->row), sizeof(int), 1, fp);
 	fread(&(params->A2->column), sizeof(int), 1, fp);
-	fread(params->A2->val, sizeof(float), 1, fp);
+	fread(params->A2->val, sizeof(float), params->A2->row*params->A2->column, fp);
 	fread(&(params->b2->row), sizeof(int), 1, fp);
 	fread(&(params->b2->column), sizeof(int), 1, fp);
-	fread(params->b2->val, sizeof(float), 1, fp);
+	fread(params->b2->val, sizeof(float), params->b2->row*params->b2->column, fp);
 
 	fread(&(params->A3->row), sizeof(int), 1, fp);
 	fread(&(params->A3->column), sizeof(int), 1, fp);
-	fread(params->A3->val, sizeof(float), 1, fp);
+	fread(params->A3->val, sizeof(float), params->A3->row*params->A3->column, fp);
 	fread(&(params->b3->row), sizeof(int), 1, fp);
 	fread(&(params->b3->column), sizeof(int), 1, fp);
-	fread(params->b3->val, sizeof(float), 1, fp);
+	fread(params->b3->val, sizeof(float), params->b3->row*params->b3->column, fp);
 }

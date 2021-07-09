@@ -1,6 +1,7 @@
 main
 test_main
 qmnist_data/
-obj/
+obj/*.o
+obj/*.d
 log
 *.data

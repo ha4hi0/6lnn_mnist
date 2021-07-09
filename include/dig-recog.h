@@ -25,7 +25,7 @@
 #define FC3_SIZE 10
 
 #define ETA 0.02 // 学習率
-#define EPOC 10 // エポック数
+#define EPOC 20 // エポック数
 #define BATCH 100 // バッチサイズ
 
 typedef struct matrix Matrix;
